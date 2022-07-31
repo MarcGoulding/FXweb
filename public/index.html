@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  lang="en-GB"
+  xml:lang="en-GB"
+>
+<head>
+  <title>TRADE TERMINAL</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
+
+  <!-- Font Awesome icons -->
+  <script src="https://kit.fontawesome.com/c25e427480.js" crossorigin="anonymous"></script>
+
+
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <!-- CSS -->
+  <link href="/styles/index.css" rel="stylesheet" />
+</head>
+<body>
+
+
+<!-- NAVBAR -->
+<div class="container">
+  <nav class="navbar navbar-expand-md navbar-dark">
+    <a href="#" class="navbar-brand"><img src="/resources/logo.jpeg" class="d-inline-block align-top" alt="CRIPTO" /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#toggleMobileMenu"
+      aria-controls="toggleMobileMenu"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="toggleMobileMenu">
+      <ul class="navbar-nav ms-auto text-end">
+        <li><a href="#" class="nav-link">Terminal</a></li>
+        <li><a href="/pages/diary.html" class="nav-link">Diary</a></li>
+        <li><a href="/pages/crypto.html" class="nav-link">Crypto</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="onload" tabindex="-1" aria-labelledby="breatheModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title">Take a deep breath</h5>
+            </div>
+            <div class="modal-body text-center">
+                Success requires patience :)
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- YOUR OWN QUOTE -->
+<div>
+  <input type="text" id="my-quote">
+</div>
+<!-- QUOTE OF THE DAY -->
+<div class="row" id="qod">
+  <script type="text/javascript" src="https://www.brainyquote.com/link/quotebr.js"></script>
+  <small><i><a href="/quote_of_the_day" target="_blank" rel="nofollow">more Quotes</a></i></small>
+</div>
+
+<!-- ANTICIPATED TRADES -->
+<div class="row justify-content-center" id="tradesDiv">
+  <div class="container trades">
+    <div class="row justify-content-center">
+      <div class="">
+        <div class="input-form">
+          <input id="tradesInput" type="text" placeholder="strategy EURUSD 14:00 long" required />
+          <button class="text-center" onclick="newTradeElement()"><h4>Add</h4></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="my-1 mx-2" id="tradesList">
+  </ul>
+</div>
+
+<!-- CLOCKS -->
+<div class="container mt-5 mb-3">
+  <p class="text-end" id="seconds-timer">0</p>
+  <div class="row">
+    <div class="col-sm">
+      <div class="card p-2 mb-2">
+          <p class="clock-text text-center" id="new-york">0</p>
+          <div class="mt-3">
+              <h3 class="heading text-center">New York</h3>
+          </div>
+      </div>
+    </div>
+    <div class="col-sm">    
+        <div class="card p-2 mb-2">
+          <p class="clock-text text-center" id="london">0</p>
+          <div class="mt-3">
+              <h3 class="heading text-center">London</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">          
+        <div class="card p-2 mb-2">
+          <p class="clock-text text-center" id="tokyo">0</p>
+          <div class="mt-3">
+              <h3 class="heading text-center">Tokyo</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card p-2 mb-2">
+            <p class="clock-text text-center" id="sydney">0</p>
+            <div class="mt-3">
+                <h3 class="heading text-center">Sydney</h3>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS -->
+<div class="row justify-content-center" id="newsDiv">
+  <div class="container news">
+    <p class="text-center"><a id="link" onclick="window.open('https://www.forexfactory.com/calendar?day=today', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">ForexFactory</a></p>
+    <div class="row justify-content-center">
+      <div class="">
+        <div class="input-form">
+          <input id="newsInput" type="text" placeholder="Wednesday 13:30 EUR" required />
+          <button class="text-center" onclick="newNewsElement()"><h4>Add</h4></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="my-1 mx-2" id="newsList">
+  </ul>
+</div>
+
+<!-- STRENGTH ANALYSIS -->
+<div class="row text-center">
+  <div class="col-sm">
+    <!-- 8x8 table of pairs -->
+    <table id="strength-table">
+      <tr>
+        <th><span class="fa-solid fa-cloud-arrow-up"></span></th>
+        <th>USD</th>
+        <th>CHF</th>
+        <th>GBP</th>
+        <th>CAD</th>
+        <th>AUD</th>
+        <th>NZD</th>
+        <th>JPY</th>
+      </tr>
+      <tr>
+        <th>EUR</th>
+        <td id="EURUSD" class="non-empty-cell"></td>
+        <td id="EURCHF" class="non-empty-cell"></td>
+        <td id="EURGBP" class="non-empty-cell"></td>
+        <td id="EURCAD" class="non-empty-cell"></td>
+        <td id="EURAUD" class="non-empty-cell"></td>
+        <td id="EURNZD" class="non-empty-cell"></td>
+        <td id="EURJPY" class="non-empty-cell"></td>
+      </tr>
+      <tr>
+        <th>USD</th>
+        <td class="empty-cell"></td>
+        <td id="USDCHF" class="non-empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="USDCAD" class="non-empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="USDJPY" class="non-empty-cell"></td>
+      </tr>
+      <tr>
+        <th>CHF</th>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="CHFJPY" class="non-empty-cell"></td>
+      </tr>
+      <tr>
+        <th>GBP</th>
+        <td id="GBPUSD" class="non-empty-cell"></td>
+        <td id="GBPCHF" class="non-empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="GBPCAD" class="non-empty-cell"></td>
+        <td id="GBPAUD" class="non-empty-cell"></td>
+        <td id="GBPNZD" class="non-empty-cell"></td>
+        <td id="GBPJPY" class="non-empty-cell"></td>
+      </tr>
+      <tr>
+        <th>CAD</th>
+        <td class="empty-cell"></td>
+        <td id="CADCHF" class="non-empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="CADJPY" class="non-empty-cell"></td>
+      </tr>
+      <tr>
+        <th>AUD</th>
+        <td id="AUDUSD" class="non-empty-cell"></td>
+        <td id="AUDCHF" class="non-empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="AUDCAD" class="non-empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="AUDNZD" class="non-empty-cell"></td>
+        <td id="AUDJPY" class="non-empty-cell"></td>
+      </tr>
+      <tr>
+        <th>NZD</th>
+        <td id="NZDUSD" class="non-empty-cell"></td>
+        <td id="NZDCHF" class="non-empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="NZDCAD" class="non-empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td class="empty-cell"></td>
+        <td id="NZDJPY" class="non-empty-cell"></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-sm">
+    <div class="container">
+      <table>
+        <tr><td class="text-end"><h5>EUR :</h5></td><td><h5 id="eur-strength">0</h5></td></tr>
+        <tr><td class="text-end"><h5>USD :</h5></td><td><h5 id="usd-strength">0</h5></td></tr>
+        <tr><td class="text-end"><h5>CHF :</h5></td><td><h5 id="chf-strength">0</h5></td></tr>
+        <tr><td class="text-end"><h5>GBP :</h5></td><td><h5 id="gbp-strength">0</h5></td></tr>
+        <tr><td class="text-end"><h5>CAD :</h5></td><td><h5 id="cad-strength">0</h5></td></tr>
+        <tr><td class="text-end"><h5>AUD :</h5></td><td><h5 id="aud-strength">0</h5></td></tr>
+        <tr><td class="text-end"><h5>NZD :</h5></td><td><h5 id="nzd-strength">0</h5></td></tr>
+        <tr><td class="text-end"><h5>JPY :</h5></td><td><h5 id="jpy-strength">0</h5></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TRADEABLE PAIRS LIST FROM STRENGTHS -->
+<div class="row tradeablePairs">
+  <div class="col-6">
+    <ul id="long-list" class="tradeable-list"></ul>
+  </div>
+  <div class="col-6">
+    <ul id="short-list" class="tradeable-list"></ul>
+  </div>
+</div>
+
+
+<!-- ALERTS -->
+<div class="row container alertsDiv">
+  <span id="current-time"></span>
+  <div class="form-actions">
+    <form>
+      <div class="alarm-inputs">
+        <input
+          type="number"
+          name="hour"
+          placeholder="Enter hours"
+          min="0"
+          max="12"
+          required
+        />
+        <input
+          type="number"
+          name="min"
+          min="0"
+          max="60"
+          placeholder="Enter minutes"
+          required
+        />
+        <input
+          type="number"
+          name="sec"
+          min="0"
+          max="60"
+          placeholder="Enter seconds"
+          required
+        />
+        <select name="zone" required>
+          <option value="" selected disabled>Zone</option>
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      <button class="">Submit</button>
+      </div>
+    </form>
+  </div>
+  <h2>Alarms set:</h2>
+  <ul id="alarm-list"></ul>
+</div>
+
+<!-- RISK -->
+<div class="row justify-content-r">
+  <div class="jumbotron text-center">
+    <p class="display-4">risk: <span id="riskValue">1.104</span></p>
+    <p class="lead">EVZ: <span id="EVZValue">(EVZ)</span></p>
+  </div>
+</div>
+<div class="row">
+  <p class="text-center">
+    <a id="link" onclick="window.open('https://www.babypips.com/tools/position-size-calculator', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">BabyPips Calculator</a>
+    <br>
+    <a id="link" onclick="window.open('https://www.online-calculator.com/simple-full-screen-calculator/', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">Calculator</a>
+  </p>
+</div>
+
+
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+  <p class="col-md-4 mb-0"><a href="https://www.cripto.tech/">© 2022 CRIPTO Ltd.</a></p>
+</footer>
+
+
+
+
+<!-- <script src="scripts/create_table.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="/scripts/index.js"></script>
+</body>
+</html>

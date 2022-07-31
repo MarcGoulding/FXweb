@@ -1,0 +1,25 @@
+{
+  "name": "coms32500",
+  "version": "1.0.0",
+  "description": "Coursework project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "valimate": "node ./node_modules/valimate/valimate.js valimate.json",
+    "validate": "npm start & npm run valimate",
+    "stop": "killall node"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.1",
+    "bcrypt": "^4.0.1",
+    "bulma": "^0.8.0",
+    "sqlite-async": "^1.0.12",
+    "sqlite3": "^4.1.1",
+    "tabulator": "^0.2.40",
+    "valid-url": "^1.0.9",
+    "valimate": "^2.3.0"
+  }
+}
