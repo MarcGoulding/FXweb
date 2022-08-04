@@ -26,7 +26,7 @@ var OK = 200,
   Error = 500;
 
 // Define web domain and port
-let port = 443;
+let port = 8000;
 let domain = "localhost";
 
 // Final global variable definitions
