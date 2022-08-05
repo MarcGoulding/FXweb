@@ -42,9 +42,8 @@
     </button>
     <div class="collapse navbar-collapse" id="toggleMobileMenu">
       <ul class="navbar-nav ms-auto text-end">
-        <li><a href="#" class="nav-link">Terminal</a></li>
-        <li><a href="/pages/diary.html" class="nav-link">Diary</a></li>
-        <li><a href="/pages/crypto.html" class="nav-link">Crypto</a></li>
+        <li><a href="#" class="nav-link">FX</a></li>
+        <li><a href="/crypto.html" class="nav-link">Crypto</a></li>
       </ul>
     </div>
   </nav>
@@ -52,18 +51,22 @@
 
 <!-- MODAL -->
 <div class="modal fade" id="onload" tabindex="-1" aria-labelledby="breatheModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h5 class="modal-title">Take a deep breath</h5>
-            </div>
-            <div class="modal-body text-center">
-                Success requires patience :)
-            </div>
-        </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title">Take a deep breath</h5>
+      </div>
+      <div class="modal-body text-center">
+        Success requires patience :)
+      </div>
     </div>
+  </div>
 </div>
 
+<!-- TRADES REGISTRY LINK -->
+<div class="row container">
+  <a id="link" onclick="window.open('https://docs.google.com/spreadsheets/d/1IGHIcXBcuZJnXyNAZCmZR29Eqz8YFIA7gT9G5cDzjJE/edit#gid=0', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">Trades Register</a>
+</div>
 <!-- YOUR OWN QUOTE -->
 <div>
   <input type="text" id="my-quote">
@@ -146,6 +149,12 @@
   </ul>
 </div>
 
+<!-- DXY -->
+<div class="row">
+  <a id="link" onclick="window.open('https://finviz.com/forex_performance.ashx?v=2&tv=2&o=-perfdaypct', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">FINVIZ PERF</a>
+  <br>
+  <a id="link" onclick="window.open('https://www.tradingview.com/chart/SiF6XqVw/?symbol=INDEX%3ADXY', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">DXY</a>
+</div>
 <!-- STRENGTH ANALYSIS -->
 <div class="row text-center">
   <div class="col-sm">
@@ -251,12 +260,12 @@
 
 <!-- TRADEABLE PAIRS LIST FROM STRENGTHS -->
 <div class="row tradeablePairs">
-  <div class="card">
-    <ul id="long-list" class="tradeable-list"></ul>
-  </div>
-  <div class="card">
-    <ul id="short-list" class="tradeable-list"></ul>
-  </div>
+  <table>
+    <tr>
+      <td><ul id="long-list" class="tradeable-list cell"></ul></td>
+      <td><ul id="short-list" class="tradeable-list cell"></ul></td>
+    </tr>
+  </table>
 </div>
 
 
@@ -303,6 +312,32 @@
   <ul id="alarm-list"></ul>
 </div>
 
+<!-- STRATEGY LIBRARY -->
+<div class="tab">
+  <button class="tablinks" onclick="openStrategyTab(event, '180PC')">London</button>
+  <button class="tablinks" onclick="openStrategyTab(event, '20B')">Paris</button>
+  <button class="tablinks" onclick="openStrategyTab(event, 'PipRunner')">Tokyo</button>
+</div>
+<div id="180PC" class="tabcontent">
+  <h1 class="recipe-title">180 PHASE CHANGER</h1>
+  <li>D1 / H4 timeframe</li>
+  <li><span style="color:yellow">8</span>-<span style="color:blue">20</span> EMA in order</li>
+  <li>2 cycles</li>
+  <li>current bar crosses <span style="color:yellow">8</span> EMA</li>
+  <li>ringed-high/ringed-low formation</li>
+  <li>Entry: High/Low of current bar</li>
+  <li>SL: High/Low of current bar plus spread</li>
+  <li>TP: 1:1 ratio</li>
+</div>
+<div id="20B" class="tabcontent">
+  <h3>Paris</h3>
+  <p>Paris is the capital of France.</p> 
+</div>
+<div id="PipRunner" class="tabcontent">
+  <h3>Tokyo</h3>
+  <p>Tokyo is the capital of Japan.</p>
+</div>
+
 <!-- RISK -->
 <div class="row justify-content-r">
   <div class="jumbotron text-center">
@@ -317,12 +352,6 @@
     <a id="link" onclick="window.open('https://www.online-calculator.com/simple-full-screen-calculator/', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">Calculator</a>
   </p>
 </div>
-<div class="row">
-  <a id="link" onclick="window.open('https://finviz.com/forex_performance.ashx?v=2&tv=2&o=-perfdaypct', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">FINVIZ PERF</a>
-  <br>
-  <a id="link" onclick="window.open('https://www.tradingview.com/chart/SiF6XqVw/?symbol=INDEX%3ADXY', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">DXY</a>
-  
-</div>
 <!-- TP -->
 <div>
   <input type="text" style="background-color: black;">
@@ -336,8 +365,9 @@
 
 
 
+<!-- SCRIPTSs -->
 <!-- <script src="scripts/create_table.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-<script src="/scripts/index.js"></script>
+<script type="text/javascript" src="/scripts/crypto.js"></script>
 </body>
 </html>

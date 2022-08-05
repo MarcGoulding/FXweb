@@ -171,8 +171,11 @@ module.exports = (client) => class ChartSession {
    * @param {...{}} data Packet data
    */
   #handleEvent(ev, ...data) {
-    this.#callbacks[ev].forEach((e) => e(...data));
-    this.#callbacks.event.forEach((e) => e(ev, ...data));
+    try {
+      this.#callbacks[ev].forEach((e) => e(...data));
+      this.#callbacks.event.forEach((e) => e(ev, ...data));
+    }catch(err){
+    }
   }
 
   #handleError(...msgs) {
@@ -184,67 +187,75 @@ module.exports = (client) => class ChartSession {
     this.#client.sessions[this.#chartSessionID] = {
       type: 'chart',
       onData: (packet) => {
-        if (global.TW_DEBUG) console.log('§90§30§106 CHART SESSION §0 DATA', packet);
+        try {
+          if (global.TW_DEBUG) console.log('§90§30§106 CHART SESSION §0 DATA', packet);
 
-        if (typeof packet.data[1] === 'string' && this.#studyListeners[packet.data[1]]) {
-          this.#studyListeners[packet.data[1]](packet);
-          return;
-        }
+          if (typeof packet.data[1] === 'string' && this.#studyListeners[packet.data[1]]) {
+            this.#studyListeners[packet.data[1]](packet);
+            return;
+          }
 
-        if (packet.type === 'symbol_resolved') {
-          this.#infos = {
-            series_id: packet.data[1],
-            ...packet.data[2],
-          };
+          if (packet.type === 'symbol_resolved') {
+            this.#infos = {
+              series_id: packet.data[1],
+              ...packet.data[2],
+            };
 
-          this.#handleEvent('symbolLoaded');
-          return;
-        }
+            this.#handleEvent('symbolLoaded');
+            return;
+          }
 
-        if (['timescale_update', 'du'].includes(packet.type)) {
-          const changes = [];
+          if (['timescale_update', 'du'].includes(packet.type)) {
+            const changes = [];
 
-          Object.keys(packet.data[1]).forEach((k) => {
-            changes.push(k);
-            if (k === '$prices') {
-              const periods = packet.data[1].$prices;
-              if (!periods || !periods.s) return;
+            Object.keys(packet.data[1]).forEach((k) => {
+              changes.push(k);
+              if (k === '$prices') {
+                const periods = packet.data[1].$prices;
+                if (!periods || !periods.s) return;
 
-              periods.s.forEach((p) => {
-                [this.#chartSession.indexes[p.i]] = p.v;
-                this.#periods[p.v[0]] = {
-                  time: p.v[0],
-                  open: p.v[1],
-                  close: p.v[4],
-                  max: p.v[2],
-                  min: p.v[3],
-                  volume: Math.round(p.v[5] * 100) / 100,
-                };
-              });
+                periods.s.forEach((p) => {
+                  [this.#chartSession.indexes[p.i]] = p.v;
+                  this.#periods[p.v[0]] = {
+                    time: p.v[0],
+                    open: p.v[1],
+                    close: p.v[4],
+                    max: p.v[2],
+                    min: p.v[3],
+                    volume: Math.round(p.v[5] * 100) / 100,
+                  };
+                });
 
+                return;
+              }
+
+              if (this.#studyListeners[k]) this.#studyListeners[k](packet);
+            });
+            try{
+              this.#handleEvent('update', changes);
+              return;
+            } catch (err) {
               return;
             }
+            
+          }
 
-            if (this.#studyListeners[k]) this.#studyListeners[k](packet);
-          });
+          if (packet.type === 'symbol_error') {
+            this.#handleError(`(${packet.data[1]}) Symbol error:`, packet.data[2]);
+            return;
+          }
 
-          this.#handleEvent('update', changes);
+          if (packet.type === 'series_error') {
+            this.#handleError('Series error:', packet.data[3]);
+            return;
+          }
+
+          if (packet.type === 'critical_error') {
+            const [, name, description] = packet.data;
+            this.#handleError('Critical error:', name, description);
+          }
+        } catch (err) {
           return;
-        }
-
-        if (packet.type === 'symbol_error') {
-          this.#handleError(`(${packet.data[1]}) Symbol error:`, packet.data[2]);
-          return;
-        }
-
-        if (packet.type === 'series_error') {
-          this.#handleError('Series error:', packet.data[3]);
-          return;
-        }
-
-        if (packet.type === 'critical_error') {
-          const [, name, description] = packet.data;
-          this.#handleError('Critical error:', name, description);
         }
       },
     };

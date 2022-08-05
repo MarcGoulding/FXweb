@@ -16,7 +16,9 @@ const TradingView = require("./server_scripts/TradingView/main");
 // Define the private key and certificate for HTTPS
 const security = {
   key: fs_sync.readFileSync("./certs/key.pem"),
-  cert: fs_sync.readFileSync("./certs/certificate.pem")
+  cert: fs_sync.readFileSync("./certs/cert.pem")
+  // key: fs_sync.readFileSync("./certs/MarcGoulding-self-signed.key"),
+  // cert: fs_sync.readFileSync("./certs/MarcGoulding-self-signed.key.crt"),
 };
 
 // Define HTTP error codes
@@ -131,17 +133,21 @@ async function updateStrengths(url, request, response) {
 }
 
 // function to retreive $EVZ close price.
-function getEVZ(url, response) {
+async function getEVZ(url, response) {
   // scrape EVZ data from TradingView
-  const client = new TradingView.Client();
-  const chart = new client.Session.Chart();
-  chart.setMarket('CBOE:EVZ', {timeframe: '240', range: 1, to: 0});
+  const client = await new TradingView.Client();
+  const chart = await new client.Session.Chart();
+  await chart.setMarket('CBOE:EVZ', {timeframe: '240', range: 1, to: 0});
   var text = "(EVZ)";
-  chart.onUpdate( function() {
+  chart.onUpdate( async function() {
     if (!chart.periods[0]) return;
     var text = `${chart.periods[0].close}`;
-    deliver(response, "text/plain", text);
-    client.end();
+    try {
+      deliver(response, "text/plain", text);
+    } catch (err) {
+      return;
+    }
+    await client.end();
   });
 }
 

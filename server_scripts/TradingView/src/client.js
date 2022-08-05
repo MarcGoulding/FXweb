@@ -180,8 +180,12 @@ module.exports = class Client {
         const session = packet.p[0];
 
         if (session && this.#sessions[session]) {
-          this.#sessions[session].onData(parsed);
-          return;
+          try {
+            this.#sessions[session].onData(parsed);
+            return;
+          } catch (err){
+            return;
+          }
         }
       }
 
