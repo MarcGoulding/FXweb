@@ -313,14 +313,15 @@
 </div>
 
 <!-- STRATEGY LIBRARY -->
-<div class="tab">
-  <button class="tablinks" onclick="openStrategyTab(event, '180PC')">London</button>
-  <button class="tablinks" onclick="openStrategyTab(event, '20B')">Paris</button>
-  <button class="tablinks" onclick="openStrategyTab(event, 'PipRunner')">Tokyo</button>
+<div class="tab" id="stratlib">
+  <button class="tablinks" onclick="openStrategyTab(event, '180PC')">180PC</button>
+  <button class="tablinks" onclick="openStrategyTab(event, '20B')">20B</button>
+  <button class="tablinks" onclick="openStrategyTab(event, 'PipRunner')">Pip Runner</button>
 </div>
 <div id="180PC" class="tabcontent">
-  <h1 class="recipe-title">180 PHASE CHANGER</h1>
-  <li>D1 / H4 timeframe</li>
+  <h1>180 Phase Changer</h1>
+  <!-- 
+  <li>D1 / H4 Timeframe</li>
   <li><span style="color:yellow">8</span>-<span style="color:blue">20</span> EMA in order</li>
   <li>2 cycles</li>
   <li>current bar crosses <span style="color:yellow">8</span> EMA</li>
@@ -328,14 +329,22 @@
   <li>Entry: High/Low of current bar</li>
   <li>SL: High/Low of current bar plus spread</li>
   <li>TP: 1:1 ratio</li>
+  -->
+  <li>H4 timeframe</li>
+  <li>2 cycles-defined by light green/red in relative cycles indicator (tradingview)</li>
+  <li>last candle crosses 8 ema</li>
+  <li>Ringed high/low</li>
+  <li>TP 1:1</li>
 </div>
 <div id="20B" class="tabcontent">
-  <h3>Paris</h3>
-  <p>Paris is the capital of France.</p> 
+  <h1>20 Bounce</h1>
+
 </div>
 <div id="PipRunner" class="tabcontent">
-  <h3>Tokyo</h3>
-  <p>Tokyo is the capital of Japan.</p>
+  <h1>Pip Runner</h1>
+  <li>M15 Timeframe</li>
+  <li><img src="/resources/piprunner.jpeg" alt="Pip Runner screenshot" /></li>
+
 </div>
 
 <!-- RISK -->
@@ -368,6 +377,6 @@
 <!-- SCRIPTSs -->
 <!-- <script src="scripts/create_table.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/scripts/crypto.js"></script>
+<script type="text/javascript" src="/scripts/index.js"></script>
 </body>
 </html>

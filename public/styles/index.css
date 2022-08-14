@@ -359,6 +359,7 @@ input {
   color: white;
   border: blue;
   min-width: 100%;
+  text-align: center;
 }
 /*-----------------------------------------------*/
 .alertsDiv button {

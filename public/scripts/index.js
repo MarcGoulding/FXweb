@@ -710,7 +710,7 @@ function renderTime() {
   currentTime.innerHTML = timeString;
 }  setInterval(renderTime, 1000);  // Update time every second
 
-// Strategy tabs
+// Strategy library
 function openStrategyTab(evt, tabID) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
@@ -724,3 +724,4 @@ function openStrategyTab(evt, tabID) {
   document.getElementById(tabID).style.display = "block";
   evt.currentTarget.className += " active";
 }
+
