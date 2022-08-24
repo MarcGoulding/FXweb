@@ -6,8 +6,8 @@ var fs = require("fs");
 var file = "./db/FX.db"
 var db;
 // del();
-removeEntry();
-// create();
+// removeEntry();
+create();
 
 async function del() {
 	fs.unlinkSync(file);
@@ -31,7 +31,41 @@ async function create() {
 			filename: file,
 			driver: sqlite3.Database
 		});
-		await db.run("PRAGMA foreign_keys = on");
+		// await db.run("PRAGMA foreign_keys = on");
+
+		// Create Diary table
+		// await db.run("CREATE TABLE fxalarms (pair, alarm, comment)");
+		// await db.run("INSERT INTO fxalarms VALUES ('EURUSD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('GBPUSD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('USDJPY', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('AUDUSD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('NZDUSD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('USDCAD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('USDCHF', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('AUDCAD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('AUDJPY', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('AUDNZD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('AUDCHF', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('CHFJPY', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('EURCHF', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('EURGBP', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('EURAUD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('EURCAD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('EURNZD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('EURJPY', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('GBPJPY', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('GBPCHF', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('GBPCAD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('GBPAUD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('GBPNZD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('NZDCHF', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('NZDJPY', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('NZDCAD', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('CADCHF', '12:00:00', 'no comment')");
+		// await db.run("INSERT INTO fxalarms VALUES ('CADJPY', '12:00:00', 'no comment')");
+		as = await db.all("SELECT * FROM fxalarms");
+		console.log(as);
+		return;
 
 		// Create strengths table
 		await db.run("CREATE TABLE strengths (pair, base, quote, strength)");

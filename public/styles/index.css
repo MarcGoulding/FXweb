@@ -324,10 +324,10 @@ input {
 
 /*-----------------------------------------------*/
 
-.tradeablePairs {
+/*.tradeablePairs {
   margin: auto;
   max-width: 120px;
-}
+}*/
 .tradeable-list li {
   list-style: none;
   margin: 0.2rem;
@@ -353,13 +353,16 @@ input {
 #qod {
   margin: auto !important;
   justify-content: center !important;
+  font-weight: 500;
 }
+
 #my-quote {
   background-color: black;
   color: white;
   border: blue;
   min-width: 100%;
   text-align: center;
+  font-weight: 500;
 }
 /*-----------------------------------------------*/
 .alertsDiv button {
@@ -385,8 +388,8 @@ input {
 /* Style the tab */
 .tab {
   overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+  border: 1px solid #1C1A7E;
+  background-color: #1C1A7E;
 }
 
 /* Style the buttons inside the tab */
@@ -399,16 +402,18 @@ input {
   padding: 14px 16px;
   transition: 0.3s;
   font-size: 17px;
+  color: white !important;
+  font-weight: 500;
 }
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #ddd;
+  background-color: #70B3D4;
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-  background-color: #ccc;
+  background-color: #7BDAC6;
 }
 
 /* Style the tab content */
@@ -428,4 +433,54 @@ input {
 @keyframes fadeEffect {
   from {opacity: 0;}
   to {opacity: 1;}
+}
+
+
+/*---------- DIARY -----------*/
+
+#currentTime {
+  text-align: center;
+  background-color: #1C1A7E;
+  margin: auto;
+  padding: 1rem;  
+}
+
+.inline-block {
+  display: inline-block;
+  /*margin: 1rem 0.2rem;*/
+  margin: 0 1rem;
+}
+
+#diary {
+  margin-top: 1rem;
+}
+#diary .pair {
+  font-weight: 500;
+}
+
+#diary select {
+  padding: 0.3rem;
+  border: 1px solid #1C1A7E;
+  border-radius: 0.2rem;
+  outline: none;
+  border: none;
+  height: 100%;
+}
+
+#diary span {
+  padding: 0.3rem;
+  border: 1px solid #1C1A7E;
+  border-radius: 0.2rem;
+  outline: none;
+  border: none;
+  height: 100%;
+}
+#diary li {
+  margin: 0 1rem;
+  list-style: none;
+  border-radius: 0.3rem;
+}
+
+#diary ul li:nth-child(odd) {
+  background-color: #252525;
 }

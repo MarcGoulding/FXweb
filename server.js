@@ -11,7 +11,7 @@ const validUrl = require("valid-url");
 const sqlite = require("sqlite-async");
 
 // Import custom packages in serverscripts/
-const TradingView = require("./server_scripts/TradingView/main");
+// const TradingView = require("./server_scripts/TradingView/main");
 
 // Define the private key and certificate for HTTPS
 const security = {
@@ -28,7 +28,7 @@ var OK = 200,
   Error = 500;
 
 // Define web domain and port
-let port = 8000;
+let port = 443;
 let domain = "localhost";
 
 // Final global variable definitions
@@ -61,8 +61,11 @@ function handle(request, response) {
     !url.endsWith(".jpg") &&
     !url.endsWith(".jpeg") &&
     !url.includes("get/") &&
+    !url.includes("comment?") &&
+    !url.includes("alarm?") &&
     !url.includes("strengths?") &&
-    !url.includes("news?")
+    !url.includes("news?") &&
+    !url.endsWith(".mp3")
   ) {
     console.log("invalid request: ", url);
     return fail(response, BadType, "Bad request type");
@@ -81,15 +84,44 @@ function handle(request, response) {
   }
 
   // Routing (calls to go to specific function)
-  else if (url.startsWith("/get/evz")) getEVZ(url, response);
+  // else if (url.startsWith("/get/evz")) getEVZ(url, response);
   else if (url.startsWith("/get/strengths")) getList(response, "strengths");
   else if (url.startsWith("/post/strengths?")) updateStrengths(url, request, response);
   else if (url.startsWith("/get/news")) getList(response, "news");
   else if (url.startsWith("/post/news?")) addNews(url, response);
   else if (url.startsWith("/del/news?")) delNews(url, response);
+  else if (url.startsWith("/get/fxalarms")) getList(response, "fxalarms");
+  else if (url.startsWith("/post/comment?")) updateAlarmComment(url, response);
+  else if (url.startsWith("/post/alarm?")) updateAlarm(url, response);
   else getFile(url, response);
 }
 
+// update fxalarms database with new alarm.
+async function updateAlarm(url, response) {
+  var data = url.split('?');
+  var pair = data[1];
+  var alarm = data[2];
+  console.log(data);
+
+  // Update db entry
+  await db.run(`UPDATE fxalarms SET alarm = "${alarm}" WHERE pair = "${pair.toUpperCase()}"`);
+
+  deliver(response, types.txt, "fxalarm_updated");
+}
+
+// update fxalarms database with new comment.
+async function updateAlarmComment(url, response) {
+  var data = url.split('?');
+  var pair = data[1];
+  var comment = data[2];
+  console.log(data);
+
+  // Update db entry
+  await db.run(`UPDATE fxalarms SET comment = "${comment}" WHERE pair = "${pair.toUpperCase()}"`);
+
+  // deliver response
+  deliver(response, types.txt, "fxcomment_updated");
+}
 
 // update news database with new entry.
 async function addNews(url, response) {
@@ -133,23 +165,23 @@ async function updateStrengths(url, request, response) {
 }
 
 // function to retreive $EVZ close price.
-async function getEVZ(url, response) {
-  // scrape EVZ data from TradingView
-  const client = await new TradingView.Client();
-  const chart = await new client.Session.Chart();
-  await chart.setMarket('CBOE:EVZ', {timeframe: '240', range: 1, to: 0});
-  var text = "(EVZ)";
-  chart.onUpdate( async function() {
-    if (!chart.periods[0]) return;
-    var text = `${chart.periods[0].close}`;
-    try {
-      deliver(response, "text/plain", text);
-    } catch (err) {
-      return;
-    }
-    await client.end();
-  });
-}
+// async function getEVZ(url, response) {
+//   // scrape EVZ data from TradingView
+//   const client = await new TradingView.Client();
+//   const chart = await new client.Session.Chart();
+//   await chart.setMarket('CBOE:EVZ', {timeframe: '240', range: 1, to: 0});
+//   var text = "(EVZ)";
+//   chart.onUpdate( async function() {
+//     if (!chart.periods[0]) return;
+//     var text = `${chart.periods[0].close}`;
+//     try {
+//       deliver(response, "text/plain", text);
+//     } catch (err) {
+//       return;
+//     }
+//     await client.end();
+//   });
+// }
 
 // function to get list of banks for homepage.
 async function getList(response, table) {
@@ -162,8 +194,6 @@ async function getList(response, table) {
   var text = JSON.stringify(list);
   deliver(response, "text/plain", text);
 }
-
-
 
 // function to prepare the bank template with the gathered db info for that bank
 function prepare(text, data, response) {
@@ -206,11 +236,12 @@ async function getFile(url, response) {
   var type = findType(url);
   if (type == null) return fail(response, BadType, "File type not supported");
 
-  // get relative patch of ile, and read into contents
+  // get relative patch of file, and read into contents
   var file = root + url;
   var content = await fs.readFile(file);
 
   // pass contents to deliver
+  console.log("---", file)
   deliver(response, type, content);
 }
 
@@ -219,10 +250,11 @@ function deliver(response, type, content) {
   // input the type into the header for the response
   var typeHeader = { "Content-Type": type };
 
-
   response.writeHead(OK, typeHeader);
-  if (type == "image/jpeg" || type == "image/png") {
-    // respond with images
+  if (   type == "image/jpeg"
+      || type == "image/png"
+      || type == 'audio/mpeg') {
+    // respond with content (without parsing to text)
     response.write(content);
   } else {
     // respond with text

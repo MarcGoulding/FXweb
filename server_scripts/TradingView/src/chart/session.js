@@ -322,14 +322,18 @@ module.exports = (client) => class ChartSession {
 
     this.#periods = {};
 
-    this.#client.send(`${this.#seriesCreated ? 'modify' : 'create'}_series`, [
-      this.#chartSessionID,
-      '$prices',
-      's1',
-      `ser_${this.#currentSeries}`,
-      timeframe,
-      this.#seriesCreated ? '' : calcRange,
-    ]);
+    try{
+      this.#client.send(`${this.#seriesCreated ? 'modify' : 'create'}_series`, [
+        this.#chartSessionID,
+        '$prices',
+        's1',
+        `ser_${this.#currentSeries}`,
+        timeframe,
+        this.#seriesCreated ? '' : calcRange,
+      ]);
+    } catch (err) {
+      return;
+    }
 
     this.#seriesCreated = true;
   }

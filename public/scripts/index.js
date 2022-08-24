@@ -3,12 +3,13 @@ console.log("starting index.js ...");
 window.onload = () => {
     $('#onload').modal('show');
 
-    fetchEVZ();
+    // fetchEVZ();
     fetchStrengths();
     fetchNews();
+    fetchDiary();
 }
 
-var risk = 1.104
+var risk = 1
 var tradeableCurrencies = {};
 var tradeablePairs = [];
 
@@ -27,25 +28,25 @@ setTimeout(
 );
 
 // Function to request EVZ value from server
-function fetchEVZ() {
-  var q = new XMLHttpRequest();
-  q.onreadystatechange = receiveEVZ;
-  q.open("GET", '/get/evz', true);
-  q.send();
-}
+// function fetchEVZ() {
+//   var q = new XMLHttpRequest();
+//   q.onreadystatechange = receiveEVZ;
+//   q.open("GET", '/get/evz', true);
+//   q.send();
+// }
 
-// Handler to process EVZ received from server
-function receiveEVZ() {
-  if (this.readyState != XMLHttpRequest.DONE) return;
-  var text = this.responseText;
-  $('#EVZValue').text(text);
+// // Handler to process EVZ received from server
+// function receiveEVZ() {
+//   if (this.readyState != XMLHttpRequest.DONE) return;
+//   var text = this.responseText;
+//   $('#EVZValue').text(text);
 
-  // Update risk value based on EVZ value
-  var evz = parseInt(text);
-  if (evz >= 7) $('#riskValue').text(risk + "%");
-  else if (7 > evz && evz >= 5) $('#riskValue').text(risk/2 + "%");
-  else if (evz < 5) $('#riskValue').text(risk/2 + "% (range only)");
-}
+//   // Update risk value based on EVZ value
+//   var evz = parseInt(text);
+//   if (evz >= 7) $('#riskValue').text(risk + "%");
+//   else if (7 > evz && evz >= 5) $('#riskValue').text(risk/2 + "%");
+//   else if (evz < 5) $('#riskValue').text(risk/2 + "% (range only)");
+// }
 
 // Fetch news list from server
 function fetchNews() {
@@ -107,8 +108,8 @@ function updateClocks(){
   var s = addZero(date.getSeconds());
   newYorkTimeEl.innerHTML = ((h-5+23)%23)+':'+m;
   londonTimeEl.innerHTML = h+':'+m;
-  tokyoTimeEl.innerHTML = ((h+9)%23)+':'+m;
-  sydneyTimeEl.innerHTML = ((h+11)%23)+':'+m;
+  tokyoTimeEl.innerHTML = ((h+8)%23)+':'+m;
+  sydneyTimeEl.innerHTML = ((h+9)%23)+':'+m;
 
   /* Display timezones not between 9-5 in red */
   if (((h-5)%23)<9 || ((h-5)%23)>=17) {
@@ -121,12 +122,12 @@ function updateClocks(){
   }else{
       londonTimeEl.style.color = 'white';
   }
-  if (((h+9)%23)<9 || ((h+9)%23)>17) {
+  if (((h+8)%23)<9 || ((h+8)%23)>17) {
       tokyoTimeEl.style.color = '#1C1A7E';
   }else{
       tokyoTimeEl.style.color = 'white';
   }
-  if (((h+11)%23)<9 || ((h+11)%23)>17) {
+  if (((h+9)%23)<9 || ((h+9)%23)>17) {
       sydneyTimeEl.style.color = '#1C1A7E';
   }else{
       sydneyTimeEl.style.color = 'white';
@@ -500,7 +501,7 @@ function generateStrengthOutput() {
 
 function changeStrength(value){
   value++;
-  if (value > 1){
+  if (value > 2){
     value = -1;
   }
   return value;
@@ -539,7 +540,6 @@ var validPairs = [
 
 function generateTradeablePairs() {
   var extensiveListOfPairs = [];
-  var tradeablePairs = [];
   // for each currency
   for (var j=0; j<tradeableCurrencies['short'].length; j++) {
     for (var i=0; i<tradeableCurrencies['long'].length; i++) {
@@ -586,6 +586,9 @@ function generateTradeablePairs() {
 function updateStrengthStyle(pair) {
   /* Change styling to new value */
   switch(strengths[pair]){
+    case 2:
+      cells[pair].style.backgroundColor = "gray";
+      break;
     case 1:
       cells[pair].style.backgroundColor = "green";
       break;
@@ -692,24 +695,6 @@ cells.CADJPY.onclick = updateStrengthCell;
 cells.CADCHF.onclick = updateStrengthCell;
 cells.CHFJPY.onclick = updateStrengthCell;
 
-//-------------------ALARM CLOCK-------------------------
-function getTimeString(hours, minutes, seconds, zone) {
-  if (minutes / 10 < 1) minutes = "0" + minutes;
-  if (seconds/10 < 1) seconds = "0" + seconds;
-  return `${hours}:${minutes}:${seconds} ${zone}`;
-}
-function renderTime() {
-  var currentTime = document.querySelector("#current-time");
-  const currentDate = new Date();
-  var hours = currentDate.getHours();
-  var minutes = currentDate.getMinutes();
-  var seconds = currentDate.getSeconds();
-  var zone = (hours >= 12) ? "PM" : "AM";
-  hours = hours % 12;
-  const timeString = getTimeString(hours, minutes, seconds, zone);
-  currentTime.innerHTML = timeString;
-}  setInterval(renderTime, 1000);  // Update time every second
-
 // Strategy library
 function openStrategyTab(evt, tabID) {
   var i, tabcontent, tablinks;
@@ -724,4 +709,220 @@ function openStrategyTab(evt, tabID) {
   document.getElementById(tabID).style.display = "block";
   evt.currentTarget.className += " active";
 }
+
+// DIARY & ALARMS
+const ringtone = new Audio('assets/alarm.mp3');
+
+// Fetch diary list from server
+function fetchDiary() {
+  var q = new XMLHttpRequest();
+  q.onreadystatechange = receiveDiary;
+  q.open("GET", "/get/fxalarms", true);
+  q.send();
+}
+
+// Handle news list received from server
+
+var isAlarmSet = []
+var alarmTime = []
+
+function receiveDiary() {
+  if (this.readyState != XMLHttpRequest.DONE) return;
+  var list = JSON.parse(this.responseText);
+
+  var ul = document.querySelector("#alarmList");
+
+
+  for (var i=0; i<list.length; i++) {
+
+    // PAIR
+    var li = document.createElement("li");
+    li.id = list[i].pair;
+    // Add row to diary list
+    ul.appendChild(li);
+    var divPair = document.createElement("div");
+    divPair.classList.add("inline-block");
+    divPair.classList.add("pair");
+    li.appendChild(divPair);
+    divPair.style.width = "4rem";
+    divPair.innerText = list[i].pair;
+    if (tradeableCurrencies['long'].includes(list[i].pair.substring(0,3)) && tradeablePairs.includes(list[i].pair)) divPair.style.color = "green";
+    else if (tradeablePairs.includes(list[i].pair)) divPair.style.color = "red";
+
+    // ALARM
+    var divAlarm = document.createElement("div");
+    divAlarm.classList.add("alarm");
+    divAlarm.classList.add("inline-block");
+    li.appendChild(divAlarm);
+    divAlarm.innerText = list[i].alarm;
+    divAlarm.style.width = "4rem";
+
+    // ALARM SET
+    var divSelects = document.createElement("div");
+    divSelects.classList.add("selects");
+    divSelects.classList.add("inline-block");
+    li.appendChild(divSelects);
+    var selectHour = document.createElement("select");
+    divSelects.appendChild(selectHour);
+    selectHour.style.backgroundColor = "gray";
+    selectHour.style.color = "white";
+    var optionHour = document.createElement("option");
+    selectHour.appendChild(optionHour);
+    optionHour.value = "Hour";
+    optionHour.innerHTML = "H";
+    optionHour.selected = true;
+    optionHour.hidden = true;
+    for (let j=23; j>=0; j--) {
+      j = j<10? "0" + j : j;
+      let option = `<option value="${j}">${j}</option>`;
+      selectHour.firstElementChild.insertAdjacentHTML("afterend", option);
+    }
+    var selectMinute = document.createElement("select");
+    divSelects.appendChild(selectMinute);
+    selectMinute.style.backgroundColor = "gray";
+    selectMinute.style.color = "white";
+    var optionMinute = document.createElement("option");
+    selectMinute.appendChild(optionMinute);
+    optionMinute.value = "Minute";
+    optionMinute.innerHTML = "M";
+    optionMinute.selected = true;
+    optionMinute.hidden = true;
+    for (let j=50; j>=0; j = j-10) {
+      j = j<10? "0" + j : j;
+      let option = `<option value="${j}">${j}</option>`;
+      selectMinute.firstElementChild.insertAdjacentHTML("afterend", option);
+    }
+
+    var setButton = document.createElement("span");
+    // Initialise alarm variables
+    for (var j=0; j<list.length; j++) {
+      if (list[j].alarm !== "--:--") {
+        isAlarmSet[list[j].pair] = true;
+        setButton.innerHTML = "clear";
+      } else{
+        isAlarmSet[list[j].pair] = false;
+        setButton.innerHTML = "set";
+      }
+      alarmTime[list[j].pair] = list[j].alarm;
+    }
+    divSelects.appendChild(setButton);
+    setButton.style.backgroundColor = "gray";
+    setButton.style.color = "white";
+    setButton.style.fontWeight = 500;
+    setButton.id = list[i].pair;
+    setButton.onclick = function() {
+      var alarm = this.parentElement.parentElement.querySelector(".alarm");
+      var selects = this.parentElement.querySelectorAll("select");
+      let time = `${selects[0].value}:${selects[1].value}`;
+      if (isAlarmSet[this.id]) {
+        ringtone.pause();
+        alarmTime[this.id] = "--:--";
+        alarm.innerHTML = alarmTime[this.id];
+        alarm.style.backgroundColor = "inherit";
+        isAlarmSet[this.id] = false;
+        this.innerHTML = "set";
+        console.log(`Removed alarm ${time}`);
+        postAlarm(this.id, alarmTime[this.id]);
+        return;
+      }
+      if (time.includes("Hour") || time.includes("Minutes")) return alert("Please select a valid time to set alarm!");
+      alarmTime[this.id] = time;
+      console.log(`Set alarm ${time}`);
+      isAlarmSet[this.id] = true;
+      this.innerText = "clear";
+      alarm.innerHTML = time;
+      postAlarm(this.id, time);
+    };
+
+    // COMMENT
+    var divComment = document.createElement("div");
+    divComment.classList.add("inline-block");
+    li.appendChild(divComment);
+    var commentInput = document.createElement("input");
+    commentInput.classList.add("comment");
+    commentInput.style.backgroundColor = "inherit";
+    commentInput.value = parseText(list[i].comment);
+    commentInput.addEventListener('input', resizeInput); // bind the "resizeInput" callback on "input" event
+    resizeInput.call(commentInput); // immediately call the function
+
+    function resizeInput() {
+      this.style.width = (this.value.length+4) + "ch";
+    }
+    var saveComment = document.createElement("span");
+    saveComment.id = list[i].pair;
+    // saveComment.innerHTML = "save";
+    saveComment.classList.add("fa-solid");
+    saveComment.classList.add("fa-floppy-disk");
+
+    divComment.appendChild(saveComment);
+    divComment.appendChild(commentInput);
+    saveComment.onclick = function() {
+      var comment = this.parentElement.querySelector(".comment");
+      postComment(this.id, comment.value);
+    };
+  }
+}
+
+function parseText(text) {
+  var words = text.split('_');
+  var phrase = words.join(" ");
+  return phrase;
+}
+function postAlarm(pair, time) {
+  var params = pair + '?' + time;
+  var url = "/post/alarm?" + params;
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function() {
+    if (this.readyState != XMLHttpRequest.DONE) return;
+    var text = this.responseText;
+    if (text == "fxalarm_updated") console.log("alarm updated successfuly.");
+    else alert("alarm wasn't updated correctly. Please try again");
+  };
+  req.open("POST", url, true);
+  req.send();
+}
+
+function postComment(pair, comment) {
+  var params = comment.replace(/ /g,"_");
+  params = `${pair}?` + params
+  var url = "/post/comment?" + params;
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function() {
+    if (this.readyState != XMLHttpRequest.DONE) return;
+    var text = this.responseText;
+    if (text == "fxcomment_updated") console.log("Comment updated successfuly.");
+    else alert("Comment wasn't updated correctly. Please try again");
+  };
+  req.open("POST", url, true);
+  req.send();
+}
+
+let currentTime = document.querySelector("#currentTime");
+
+// Read diary db
+
+
+function updateAlarmClock() {
+  let date = new Date();
+  h = date.getHours();
+  m = date.getMinutes();
+  s = date.getSeconds();
+  h = h<10 ? "0" + h : h;
+  m = m<10 ? "0" + m : m;
+  s = s<10 ? "0" + s : s;
+
+  currentTime.innerText = `${h}:${m}:${s}`;
+
+  for (var i=0; i<validPairs.length; i++) {
+    if (alarmTime[validPairs[i]] == `${h}:${m}`) {
+      ringtone.play();
+      ringtone.loop = true;
+      // Change alarm background color
+      var ul = document.querySelector("#alarmList");
+      var li = ul.querySelector(`#${validPairs[i]}`);
+      var alarm = li.querySelector(".alarm");
+      alarm.style.backgroundColor = '#7BDAC6';
+    }
+  }
+} setInterval(updateAlarmClock, 1000);
 

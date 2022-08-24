@@ -133,7 +133,11 @@ module.exports = class Client {
    * @event onData
    */
   onData(cb) {
-    this.#callbacks.data.push(cb);
+    try{
+      this.#callbacks.data.push(cb);
+    } catch (err) {
+      return;
+    }
   }
 
   /**

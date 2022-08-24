@@ -13,8 +13,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
 
   <!-- Font Awesome icons -->
-  <script src="https://kit.fontawesome.com/c25e427480.js" crossorigin="anonymous"></script>
-
+  <script src="https://kit.fontawesome.com/1cf76dfe00.js" crossorigin="anonymous"></script>
 
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -28,7 +27,7 @@
 <!-- NAVBAR -->
 <div class="container">
   <nav class="navbar navbar-expand-md navbar-dark">
-    <a href="#" class="navbar-brand"><img src="/resources/logo.jpeg" class="d-inline-block align-top" alt="CRIPTO" /></a>
+    <a href="#" class="navbar-brand"><img src="/assets/logo.jpeg" class="d-inline-block align-top" alt="CRIPTO" /></a>
     <button
       class="navbar-toggler"
       type="button"
@@ -135,11 +134,11 @@
 <!-- NEWS -->
 <div class="row justify-content-center" id="newsDiv">
   <div class="container news">
-    <p class="text-center"><a id="link" onclick="window.open('https://www.forexfactory.com/calendar?day=today', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">ForexFactory</a></p>
+    <p class="text-center"><a id="link" onclick="window.open('https://www.forexfactory.com/calendar?day=today', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">--- NEWS ---</a></p>
     <div class="row justify-content-center">
       <div class="">
         <div class="input-form">
-          <input id="newsInput" type="text" placeholder="Wednesday 13:30 EUR" required />
+          <input id="newsInput" type="text" placeholder="Wed 13:30 EUR" required />
           <button class="text-center" onclick="newNewsElement()"><h4>Add</h4></button>
         </div>
       </div>
@@ -149,12 +148,7 @@
   </ul>
 </div>
 
-<!-- DXY -->
-<div class="row">
-  <a id="link" onclick="window.open('https://finviz.com/forex_performance.ashx?v=2&tv=2&o=-perfdaypct', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">FINVIZ PERF</a>
-  <br>
-  <a id="link" onclick="window.open('https://www.tradingview.com/chart/SiF6XqVw/?symbol=INDEX%3ADXY', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">DXY</a>
-</div>
+
 <!-- STRENGTH ANALYSIS -->
 <div class="row text-center">
   <div class="col-sm">
@@ -256,102 +250,23 @@
       </table>
     </div>
   </div>
-</div>
-
-<!-- TRADEABLE PAIRS LIST FROM STRENGTHS -->
-<div class="row tradeablePairs">
-  <table>
-    <tr>
-      <td><ul id="long-list" class="tradeable-list cell"></ul></td>
-      <td><ul id="short-list" class="tradeable-list cell"></ul></td>
-    </tr>
-  </table>
-</div>
-
-
-<!-- ALERTS -->
-<div class="row container alertsDiv">
-  <span id="current-time"></span>
-  <div class="form-actions">
-    <form>
-      <div class="alarm-inputs">
-        <input
-          type="number"
-          name="hour"
-          placeholder="Enter hours"
-          min="0"
-          max="12"
-          required
-        />
-        <input
-          type="number"
-          name="min"
-          min="0"
-          max="60"
-          placeholder="Enter minutes"
-          required
-        />
-        <input
-          type="number"
-          name="sec"
-          min="0"
-          max="60"
-          placeholder="Enter seconds"
-          required
-        />
-        <select name="zone" required>
-          <option value="" selected disabled>Zone</option>
-          <option value="AM">AM</option>
-          <option value="PM">PM</option>
-        </select>
-      <button class="">Submit</button>
-      </div>
-    </form>
+  <div class="col-sm">
+    <div class="container tradeablePairs">
+      <table>
+        <tr>
+          <td><ul id="long-list" class="tradeable-list cell"></ul></td>
+          <td><ul id="short-list" class="tradeable-list cell"></ul></td>
+        </tr>
+      </table>
+    </div>
   </div>
-  <h2>Alarms set:</h2>
-  <ul id="alarm-list"></ul>
-</div>
-
-<!-- STRATEGY LIBRARY -->
-<div class="tab" id="stratlib">
-  <button class="tablinks" onclick="openStrategyTab(event, '180PC')">180PC</button>
-  <button class="tablinks" onclick="openStrategyTab(event, '20B')">20B</button>
-  <button class="tablinks" onclick="openStrategyTab(event, 'PipRunner')">Pip Runner</button>
-</div>
-<div id="180PC" class="tabcontent">
-  <h1>180 Phase Changer</h1>
-  <!-- 
-  <li>D1 / H4 Timeframe</li>
-  <li><span style="color:yellow">8</span>-<span style="color:blue">20</span> EMA in order</li>
-  <li>2 cycles</li>
-  <li>current bar crosses <span style="color:yellow">8</span> EMA</li>
-  <li>ringed-high/ringed-low formation</li>
-  <li>Entry: High/Low of current bar</li>
-  <li>SL: High/Low of current bar plus spread</li>
-  <li>TP: 1:1 ratio</li>
-  -->
-  <li>H4 timeframe</li>
-  <li>2 cycles-defined by light green/red in relative cycles indicator (tradingview)</li>
-  <li>last candle crosses 8 ema</li>
-  <li>Ringed high/low</li>
-  <li>TP 1:1</li>
-</div>
-<div id="20B" class="tabcontent">
-  <h1>20 Bounce</h1>
-
-</div>
-<div id="PipRunner" class="tabcontent">
-  <h1>Pip Runner</h1>
-  <li>M15 Timeframe</li>
-  <li><img src="/resources/piprunner.jpeg" alt="Pip Runner screenshot" /></li>
-
 </div>
 
 <!-- RISK -->
 <div class="row justify-content-r">
   <div class="jumbotron text-center">
     <p class="display-4">risk: <span id="riskValue">1.104</span></p>
-    <p class="lead">EVZ: <span id="EVZValue">(EVZ)</span></p>
+    <!-- <p class="lead">EVZ: <span id="EVZValue">(EVZ)</span></p> -->
   </div>
 </div>
 <div class="row">
@@ -361,11 +276,54 @@
     <a id="link" onclick="window.open('https://www.online-calculator.com/simple-full-screen-calculator/', 'name','width=600,height=1000')" target="_blank" rel="noopener noreferrer">Calculator</a>
   </p>
 </div>
-<!-- TP -->
+
+<!-- (A) CURRENT TIME -->
 <div>
-  <input type="text" style="background-color: black;">
+  <h1 id="currentTime">00:00:00</h1>
 </div>
 
+<!-- <div class="row">
+  <div class="alarmColumn">
+    <select>
+      <option value="Hour" selected hidden> Hour</option>
+    </select>
+  </div>
+  <div class="alarmColumn">
+    <select>
+      <option value="Minute" selected hidden> Minute</option>
+    </select>
+  </div>
+  <button id="setAlarmButton">set</button>
+</div> -->
+<h1 class="container text-center">HOY VOY A PERDER DINERO</h1>
+<!-- DIARY & ALARMS -->
+<div class="row" id="diary">
+  <ul id="alarmList"></ul>
+</div>
+<br style="clear: both;" />
+
+
+<!-- STRATEGY LIBRARY -->
+<div class="tab" id="stratlib">
+  <button class="tablinks" onclick="openStrategyTab(event, '180PC')">180PC</button>
+  <button class="tablinks" onclick="openStrategyTab(event, 'BBB')">BBB</button>
+  <button class="tablinks" onclick="openStrategyTab(event, 'VR')">VR</button>
+</div>
+<div id="180PC" class="tabcontent">
+  <h1>180 Phase Changer</h1>
+  ____TEXT
+</div>
+<div id="BBB" class="tabcontent">
+  <h1>Bollinger Bands Breakout</h1>
+  ____TEXT
+
+</div>
+<div id="VR" class="tabcontent">
+  <h1>Volatility Reversal</h1>
+  ____TEXT
+</div>
+
+<br style="clear: both;" />
 
 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
   <p class="col-md-4 mb-0"><a href="https://www.cripto.tech/">© 2022 CRIPTO Ltd.</a></p>
@@ -378,5 +336,6 @@
 <!-- <script src="scripts/create_table.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="/scripts/index.js"></script>
+<!-- <script src="/scripts/alarm_clock.js"></script> -->
 </body>
 </html>
