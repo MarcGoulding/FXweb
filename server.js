@@ -28,7 +28,7 @@ var OK = 200,
   Error = 500;
 
 // Define web domain and port
-let port = 443;
+let port = process.env.port || 5000;
 let domain = "localhost";
 
 // Final global variable definitions
@@ -344,7 +344,8 @@ function remove_non_ascii(str) {
 
 // redirects http requests to https service
 function http_redirect(request, response) {
-  var redirect = "https://" + domain;
+  var redirect = "https://" + domain + ":" + port;
+  // var redirect = "https://" + domain;
 
   response.writeHead(301, { Location: redirect });
   response.end();

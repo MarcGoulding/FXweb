@@ -13,3 +13,12 @@ install node.js:
 install required packages:
 
 	> npm install
+
+To run server:
+
+	> node server.js
+
+On Mac:
+
+	> sudo node server.js
+

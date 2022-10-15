@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/Mathieu2301/TradingView-API.git"
   },
+  "scripts": {
+    "start": "sudo node server.js"
+  },
   "author": "Mathieu Colmon",
   "license": "ISC",
   "bugs": {
